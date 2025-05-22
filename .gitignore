@@ -1,0 +1,8 @@
+.env*
+.env.*
+!.env.example
+.vscode
+init/
+postgres_data/
+timescaledb_data/
+venv/

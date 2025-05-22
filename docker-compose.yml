@@ -1,0 +1,26 @@
+services:
+  redirector-nginx:
+    image: docker.arvancloud.ir/nginx:1.27-alpine-slim
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/common_proxy.conf:/etc/nginx/common_proxy.conf:ro
+      - ./nginx/sites-available:/etc/nginx/sites-available:ro
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled:ro
+      # Mount the ACME challenge webroot.
+      - ./nginx/html:/usr/share/nginx/html:ro
+      - ./certbot/letsencrypt:/etc/letsencrypt
+    restart: unless-stopped
+
+  redirector-certbot:
+    image: docker.arvancloud.ir/certbot/certbot
+    volumes:
+      - ./certbot/letsencrypt:/etc/letsencrypt
+      # Mount the webroot for ACME challenge responses.
+      - ./nginx/html:/usr/share/nginx/html
+      - ./certbot/renew.sh:/renew.sh:ro
+    entrypoint: [ "sh", "-c" ]
+    command: "/renew.sh"
+    restart: unless-stopped
