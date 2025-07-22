@@ -1,26 +1,38 @@
 services:
-  redirector-nginx:
-    image: docker.arvancloud.ir/nginx:1.27-alpine-slim
+  nginx:
+    container_name: "${NGINX_CONTAINER_NAME}"
+    image: "${NGINX_DOCKER_IMAGE_NAME}"
+    env_file:
+      - "${ENV_FILE}"
     ports:
-      - "80:80"
-      - "443:443"
+      - "${EXTERNAL_PORT_FOR_PORT_80}:80"
+      - "${EXTERNAL_PORT_FOR_PORT_443}:443"
+    restart: ${NGINX_CONTAINER_RESTART}
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/common_proxy.conf:/etc/nginx/common_proxy.conf:ro
-      - ./nginx/sites-available:/etc/nginx/sites-available:ro
-      - ./nginx/sites-enabled:/etc/nginx/sites-enabled:ro
-      # Mount the ACME challenge webroot.
-      - ./nginx/html:/usr/share/nginx/html:ro
-      - ./certbot/letsencrypt:/etc/letsencrypt
-    restart: unless-stopped
+      - "${MOUNT_PATH_FOR_NGINX_CONF}:/etc/nginx/nginx.conf:ro"
+      - "${MOUNT_PATH_FOR_COMMON_PROXY_CONF}:/etc/nginx/common_proxy.conf:ro"
+      - "${MOUNT_PATH_FOR_SITES_AVAILABLE}:/etc/nginx/sites-available:ro"
+      - "${MOUNT_PATH_FOR_SITES_ENABLED}:/etc/nginx/sites-enabled:ro"
+      - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html:ro"
+      - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt:ro"
+    healthcheck:
+      test: ["CMD", "${HEALTHCHECK_TEST}"]
+      interval: "${HEALTHCHECK_INTERVAL}"
+      timeout: "${HEALTHCHECK_TIMEOUT}"
+      retries: "${HEALTHCHECK_RETRIES}"
 
-  redirector-certbot:
-    image: docker.arvancloud.ir/certbot/certbot
+
+  certbot:
+    container_name: "${CERTBOT_CONTAINER_NAME}"
+    image: "${CERTBOT_DOCKER_IMAGE_NAME}"
+    env_file:
+      - "${ENV_FILE}"
     volumes:
-      - ./certbot/letsencrypt:/etc/letsencrypt
-      # Mount the webroot for ACME challenge responses.
-      - ./nginx/html:/usr/share/nginx/html
-      - ./certbot/renew.sh:/renew.sh:ro
-    entrypoint: [ "sh", "-c" ]
+      - "${MOUNT_PATH_FOR_DOCKER_SOCK}:/var/run/docker.sock"
+      - "${MOUNT_PATH_FOR_DOCKER_IO}:/usr/bin/docker"
+      - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt"
+      - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html"
+      - "${MOUNT_PATH_FOR_RENEW}:/renew.sh"
+    entrypoint: ["sh", "-c"]
     command: "/renew.sh"
-    restart: unless-stopped
+    restart: "${CERTBOT_CONTAINER_RESTART}"

@@ -1,8 +1,6 @@
+.env
 .env*
-.env.*
 !.env.example
-.vscode
-init/
-postgres_data/
-timescaledb_data/
+.vscode/
+automatic_git_status_add_commit_push.sh
 venv/
