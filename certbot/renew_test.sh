@@ -1,5 +1,6 @@
 while true
-do echo "Starting certificate renewal process (for test purpose)..."
-certbot renew --force-renewal --post-hook "Successful renewal & docker exec ${NGINX_CONTAINER_NAME} nginx -s reload"
+do echo "Starting certificate renewal process after 20 seconds (for test purpose)..."
+sleep 20s
+certbot renew --force-renewal --post-hook "sh -c 'echo \"Successful renewal\" && /usr/bin/docker exec ${NGINX_CONTAINER_NAME} nginx -s reload'"
 sleep 5d
 done
