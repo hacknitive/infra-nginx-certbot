@@ -36,3 +36,5 @@ services:
     entrypoint: ["sh", "-c"]
     command: "/renew.sh"
     restart: "${CERTBOT_CONTAINER_RESTART}"
+    depends_on:
+      - nginx
