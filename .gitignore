@@ -4,6 +4,5 @@
 .vscode/
 automatic_git_status_add_commit_push.sh
 venv/
-**/letsencrypt/*
-**/letsencrypt_log/*
 renew_and_reload.log
+certbot/
