@@ -1,0 +1,37 @@
+============================
+Certbot renewal process started at Wed 23 Jul 2025 09:57:09 PM +0330
+ Container nginx  Running
+usage: 
+  certbot [SUBCOMMAND] [options] [-d DOMAIN] [-d DOMAIN] ...
+
+Certbot can obtain and install HTTPS/TLS/SSL certificates.  By default,
+it will attempt to use a webserver both for obtaining and installing the
+certificate. 
+certbot: error: unrecognized arguments: certbot
+No certificate renewal was needed.
+Certbot renewal process finished at Wed 23 Jul 2025 09:57:09 PM +0330
+============================
+============================
+Certbot renewal process started at Wed 23 Jul 2025 09:57:38 PM +0330
+ Container nginx  Running
+usage: 
+  certbot [SUBCOMMAND] [options] [-d DOMAIN] [-d DOMAIN] ...
+
+Certbot can obtain and install HTTPS/TLS/SSL certificates.  By default,
+it will attempt to use a webserver both for obtaining and installing the
+certificate. 
+certbot: error: unrecognized arguments: certbot
+No certificate renewal was needed.
+Certbot renewal process finished at Wed 23 Jul 2025 09:57:39 PM +0330
+============================
+============================
+Certbot renewal process started at Wed 23 Jul 2025 10:01:39 PM +0330
+ Container nginx  Running
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+No renewals were attempted.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+No certificate renewal was needed.
+Certbot renewal process finished at Wed 23 Jul 2025 10:01:40 PM +0330
+============================

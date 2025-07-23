@@ -34,7 +34,7 @@ NGINX_CONTAINER="${NGINX_CONTAINER_NAME:-nginx}"
 } >> "$LOG_FILE"
 
 # Run the certbot renewal using Docker Compose with a custom compose file.
-OUTPUT=$(docker compose -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" run --rm certbot certbot renew 2>&1)
+OUTPUT=$(docker compose -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" run --rm certbot renew 2>&1)
 echo "$OUTPUT" >> "$LOG_FILE"
 
 # Check for certificate renewal by searching for "Congratulations" in the output.
