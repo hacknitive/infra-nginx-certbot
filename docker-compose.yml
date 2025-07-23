@@ -25,6 +25,9 @@ services:
   certbot:
     container_name: "${CERTBOT_CONTAINER_NAME}"
     image: "${CERTBOT_DOCKER_IMAGE_NAME}"
+    build:
+      context: .
+      dockerfile: ./certbot/Dockerfile
     env_file:
       - "${ENV_FILE}"
     volumes:
