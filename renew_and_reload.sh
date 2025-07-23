@@ -19,8 +19,8 @@ set +a
 
 # Check if a custom Docker Compose file is specified in the environment.
 # If not, default to 'docker-compose.yml'
-if [ -z "$DOCKER_COMPOSE_FILE" ]; then
-  DOCKER_COMPOSE_FILE="docker-compose.yml"
+if [ -z "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" ]; then
+  DOCKER_COMPOSE_FILE_ABSOLUTE_PATH="docker-compose.yml"
 fi
 
 # Determine the script's directory for log file location.
@@ -34,7 +34,7 @@ NGINX_CONTAINER="${NGINX_CONTAINER_NAME:-nginx}"
 } >> "$LOG_FILE"
 
 # Run the certbot renewal using Docker Compose with a custom compose file.
-OUTPUT=$(docker compose -f "$DOCKER_COMPOSE_FILE" run --rm certbot certbot renew 2>&1)
+OUTPUT=$(docker compose -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" run --rm certbot certbot renew 2>&1)
 echo "$OUTPUT" >> "$LOG_FILE"
 
 # Check for certificate renewal by searching for "Congratulations" in the output.
