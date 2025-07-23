@@ -8,7 +8,7 @@ log_message() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
 }
 
-log_message "Script execution started."
+log_message "============================ Script execution started."
 
 # Check if the notify file exists
 if [ ! -f "$NOTIFY_FILE" ]; then
@@ -34,4 +34,4 @@ else
   log_message "No certificate renewal notification detected."
 fi
 
-log_message "Script execution finished."
+log_message "============================ Script execution finished."
