@@ -31,12 +31,11 @@ services:
     env_file:
       - "${ENV_FILE}"
     volumes:
-      - "${MOUNT_PATH_FOR_DOCKER_SOCK}:/var/run/docker.sock"
-      - "${MOUNT_PATH_FOR_DOCKER_IO}:/usr/bin/docker"
       - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt"
       - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html"
       - "${MOUNT_PATH_FOR_RENEW_SCRIPT}:/renew.sh"
       - "${MOUNT_PATH_FOR_LETSENCRYPT_LOG}:/var/log/letsencrypt/"
+      - "${MOUNT_NOTIFY_TXT}:/certbot/notify.txt"
     entrypoint: ["sh", "-c"]
     command: "/renew.sh"
     restart: "${CERTBOT_CONTAINER_RESTART}"

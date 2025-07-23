@@ -1,4 +1,5 @@
 #!/bin/sh
+# Use this for test purposes only.
 while true
 do
   echo "Starting certificate renewal process..."
