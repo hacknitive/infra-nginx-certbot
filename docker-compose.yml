@@ -31,5 +31,3 @@ services:
       - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html"
       - "${MOUNT_PATH_FOR_LETSENCRYPT_LOG}:/var/log/letsencrypt/"
     restart: "${CERTBOT_CONTAINER_RESTART}"
-    depends_on:
-      - nginx

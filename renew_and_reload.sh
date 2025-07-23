@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check if the .env file path is provided as an argument
+# Check if the .env file path is provided as an argument.
 if [ "$#" -lt 1 ]; then
   echo "Usage: $0 /path/to/.env [--force]"
   exit 1
@@ -12,19 +12,18 @@ if [ ! -f "$ENV_FILE_PATH" ]; then
   exit 1
 fi
 
-# Check if the --force flag is provided as an argument and set the corresponding option.
+# Check if the optional --force flag is provided.
 FORCE_OPTION=""
 if [ "$#" -ge 2 ] && [ "$2" == "--force" ]; then
   FORCE_OPTION="--force-renewal"
 fi
 
-# Load environment variables from the specified .env file
+# Load environment variables from the specified .env file.
 set -a
 source "$ENV_FILE_PATH"
 set +a
 
-# Check if a custom Docker Compose file is specified in the environment.
-# If not, default to 'docker-compose.yml'
+# Use the certbot compose file -- default to "docker-compose.yml" if not set.
 if [ -z "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" ]; then
   DOCKER_COMPOSE_FILE_ABSOLUTE_PATH="docker-compose.yml"
 fi
@@ -39,11 +38,11 @@ NGINX_CONTAINER="${NGINX_CONTAINER_NAME:-nginx}"
   echo "Certbot renewal process started at $(date)"
 } >> "$LOG_FILE"
 
-# Run the certbot renewal using Docker Compose with a custom compose file.
+# Run certbot renew using Docker Compose, passing the --force-renewal flag if set.
 OUTPUT=$(docker compose -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" run --rm certbot renew $FORCE_OPTION 2>&1)
 echo "$OUTPUT" >> "$LOG_FILE"
 
-# Check for certificate renewal by searching for "Congratulations" in the output.
+# Check the output for a successful renewal (by detecting "Congratulations").
 if echo "$OUTPUT" | grep -qi "Congratulations"; then
   echo "Certificate renewal detected. Reloading nginx..." >> "$LOG_FILE"
   if docker exec "$NGINX_CONTAINER" nginx -s reload >> "$LOG_FILE" 2>&1; then
