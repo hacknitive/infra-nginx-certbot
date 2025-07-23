@@ -21,23 +21,15 @@ services:
       timeout: "${HEALTHCHECK_TIMEOUT}"
       retries: "${HEALTHCHECK_RETRIES}"
 
-
   certbot:
     container_name: "${CERTBOT_CONTAINER_NAME}"
     image: "${CERTBOT_DOCKER_IMAGE_NAME}"
-    build:
-      context: .
-      dockerfile: ./certbot/Dockerfile
     env_file:
       - "${ENV_FILE}"
     volumes:
       - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt"
       - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html"
-      - "${MOUNT_PATH_FOR_RENEW_SCRIPT}:/renew.sh:ro"
       - "${MOUNT_PATH_FOR_LETSENCRYPT_LOG}:/var/log/letsencrypt/"
-      - "${MOUNT_NOTIFY_TXT}:/certbot/notify.txt"
-    entrypoint: ["sh", "-c"]
-    command: "/renew.sh"
     restart: "${CERTBOT_CONTAINER_RESTART}"
     depends_on:
       - nginx
