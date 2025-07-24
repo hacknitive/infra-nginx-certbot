@@ -27,8 +27,10 @@ REQUIRED_ENV_VARS=(
   "DOCKER_COMPOSE_FILE_ABSOLUTE_PATH"
   "CERTBOT_CONTAINER_NAME"
   "NGINX_CONTAINER_NAME"
-  "RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+  "LOG_PATH"
 )
+
+LOG_FILE_PATH="${LOG_PATH}/renew_and_reload.log"
 
 for VAR in "${REQUIRED_ENV_VARS[@]}"; do
   if [ -z "${!VAR}" ]; then
@@ -37,29 +39,29 @@ for VAR in "${REQUIRED_ENV_VARS[@]}"; do
   fi
 done
 
-# Start logging using the RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH specified in the environment.
+# Start logging using the LOG_FILE_PATH specified in the environment.
 {
   echo "============================"
   echo "Certbot renewal process started at $(date)"
-} >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+} >> "$LOG_FILE_PATH"
 
 # Run the certbot renewal.
 OUTPUT=$(docker compose --env-file "$ENV_FILE_PATH" -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" run --rm "$CERTBOT_CONTAINER_NAME" renew $FORCE_OPTION 2>&1)
-echo "$OUTPUT" >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+echo "$OUTPUT" >> "$LOG_FILE_PATH"
 
 # Check if the renewal was successful (searching for the word "Congratulations").
 if echo "$OUTPUT" | grep -qi "Congratulations"; then
-  echo "Certificate renewal detected. Reloading nginx..." >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
-  if docker compose --env-file "$ENV_FILE_PATH" -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" exec "$NGINX_CONTAINER_NAME" nginx -s reload >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH" 2>&1; then
-    echo "Nginx reloaded successfully." >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+  echo "Certificate renewal detected. Reloading nginx..." >> "$LOG_FILE_PATH"
+  if docker compose --env-file "$ENV_FILE_PATH" -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" exec "$NGINX_CONTAINER_NAME" nginx -s reload >> "$LOG_FILE_PATH" 2>&1; then
+    echo "Nginx reloaded successfully." >> "$LOG_FILE_PATH"
   else
-    echo "Error: Failed to reload nginx." >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+    echo "Error: Failed to reload nginx." >> "$LOG_FILE_PATH"
   fi
 else
-  echo "No certificate renewal was needed." >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+  echo "No certificate renewal was needed." >> "$LOG_FILE_PATH"
 fi
 
 {
   echo "Certbot renewal process finished at $(date)"
   echo "============================"
-} >> "$RENEW_AND_RELOAD_SHELL_SCRIPT_LOG_FILE_PATH"
+} >> "$LOG_FILE_PATH"

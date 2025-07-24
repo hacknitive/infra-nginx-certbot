@@ -9,12 +9,10 @@ services:
       - "${NGINX_EXTERNAL_PORT_FOR_PORT_443}:443"
     restart: ${NGINX_CONTAINER_RESTART}
     volumes:
-      - "${MOUNT_PATH_FOR_NGINX_CONF}:/etc/nginx/nginx.conf:ro"
-      - "${MOUNT_PATH_FOR_COMMON_PROXY_CONF}:/etc/nginx/common_proxy.conf:ro"
-      - "${MOUNT_PATH_FOR_SITES_AVAILABLE}:/etc/nginx/sites-available:ro"
-      - "${MOUNT_PATH_FOR_SITES_ENABLED}:/etc/nginx/sites-enabled:ro"
-      - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html:ro"
-      - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt:ro"
+      - "${NGINX_CONFIG_PATH}:/etc/nginx:ro"
+      - "${NGINX_HTML_PATH}:/usr/share/nginx/html:ro"
+      - "${LETSENCRYPT_PATH}:/etc/letsencrypt:ro"
+      - "${LOG_PATH}:/var/log/nginx"
     healthcheck:
       test: ["CMD", "${HEALTHCHECK_TEST}"]
       interval: "${HEALTHCHECK_INTERVAL}"
@@ -27,7 +25,7 @@ services:
     env_file:
       - "${ENV_FILE}"
     volumes:
-      - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt"
-      - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html"
-      - "${MOUNT_PATH_FOR_LETSENCRYPT_LOG}:/var/log/letsencrypt/"
+      - "${LETSENCRYPT_PATH}:/etc/letsencrypt"
+      - "${NGINX_HTML_PATH}:/usr/share/nginx/html"
+      - "${LOG_PATH}:/var/log/letsencrypt/"
     restart: "${CERTBOT_CONTAINER_RESTART}"
