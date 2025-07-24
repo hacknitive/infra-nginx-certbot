@@ -27,10 +27,10 @@ REQUIRED_ENV_VARS=(
   "DOCKER_COMPOSE_FILE_ABSOLUTE_PATH"
   "CERTBOT_CONTAINER_NAME"
   "NGINX_CONTAINER_NAME"
-  "LOG_PATH"
+  "LOG_ABSOLUTE_PATH"
 )
 
-LOG_FILE_PATH="${LOG_PATH}/renew_and_reload.log"
+LOG_FILE_PATH="${LOG_ABSOLUTE_PATH}/renew_and_reload.log"
 
 for VAR in "${REQUIRED_ENV_VARS[@]}"; do
   if [ -z "${!VAR}" ]; then
