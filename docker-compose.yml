@@ -14,10 +14,10 @@ services:
       - "${LETSENCRYPT_PATH}:/etc/letsencrypt:ro"
       - "${LOG_PATH}:/var/log/nginx"
     healthcheck:
-      test: ["CMD", "${HEALTHCHECK_TEST}"]
-      interval: "${HEALTHCHECK_INTERVAL}"
-      timeout: "${HEALTHCHECK_TIMEOUT}"
-      retries: "${HEALTHCHECK_RETRIES}"
+      test: ["CMD", "${NGINX_HEALTHCHECK_TEST}"]
+      interval: "${NGINX_HEALTHCHECK_INTERVAL}"
+      timeout: "${NGINX_HEALTHCHECK_TIMEOUT}"
+      retries: "${NGINX_HEALTHCHECK_RETRIES}"
 
   certbot:
     container_name: "${CERTBOT_CONTAINER_NAME}"
