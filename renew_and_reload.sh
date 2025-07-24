@@ -67,12 +67,13 @@ if [ -f "$RENEW_SUCCESS_FLAG_PATH_IN_HOST" ]; then
          -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" \
          exec "$NGINX_CONTAINER_NAME" nginx -s reload >> "$LOG_FILE_PATH" 2>&1; then
     echo "Nginx reloaded successfully." >> "$LOG_FILE_PATH"
-      echo "Nginx reloaded successfully.">> "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
+    echo "Nginx reloaded successfully.">> "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
   else
     echo "Error: Failed to reload nginx." >> "$LOG_FILE_PATH"
     echo "Error: Failed to reload nginx.">> "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
 
   fi
+  echo "Done.">> "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
 
 else
   echo "No certificate renewal was needed." >> "$LOG_FILE_PATH"
