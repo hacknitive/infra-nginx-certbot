@@ -41,7 +41,7 @@ done
 
 # Define the renew success flag file.
 RENEW_SUCCESS_FLAG_PATH_IN_CERTBOT_CONTAINER="/var/log/letsencrypt/renew_success.flag"
-RENEW_SUCCESS_FLAG_PATH_IN_HOST="${LOG_FILE_PATH}/renew_success.flag"
+RENEW_SUCCESS_FLAG_PATH_IN_HOST="${LOG_ABSOLUTE_PATH}/renew_success.flag"
 
 # Remove any previous flag file from earlier runs.
 if [ -f "$RENEW_SUCCESS_FLAG_PATH_IN_HOST" ]; then
@@ -67,8 +67,11 @@ if [ -f "$RENEW_SUCCESS_FLAG_PATH_IN_HOST" ]; then
          -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" \
          exec "$NGINX_CONTAINER_NAME" nginx -s reload >> "$LOG_FILE_PATH" 2>&1; then
     echo "Nginx reloaded successfully." >> "$LOG_FILE_PATH"
+      echo "Nginx reloaded successfully.">> "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
   else
     echo "Error: Failed to reload nginx." >> "$LOG_FILE_PATH"
+    echo "Error: Failed to reload nginx.">> "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
+
   fi
 
 else
