@@ -40,11 +40,12 @@ for VAR in "${REQUIRED_ENV_VARS[@]}"; do
 done
 
 # Define the renew success flag file.
-RENEW_SUCCESS_FLAG="${LOG_ABSOLUTE_PATH}/renew_success.flag"
+RENEW_SUCCESS_FLAG_PATH_IN_CERTBOT_CONTAINER="/var/log/letsencrypt/renew_success.flag"
+RENEW_SUCCESS_FLAG_PATH_IN_HOST="${LOG_FILE_PATH}/renew_success.flag"
 
 # Remove any previous flag file from earlier runs.
-if [ -f "$RENEW_SUCCESS_FLAG" ]; then
-  rm "$RENEW_SUCCESS_FLAG"
+if [ -f "$RENEW_SUCCESS_FLAG_PATH_IN_HOST" ]; then
+  rm "$RENEW_SUCCESS_FLAG_PATH_IN_HOST"
 fi
 
 # Start logging using the LOG_FILE_PATH specified in the environment.
@@ -56,11 +57,11 @@ fi
 # Run the certbot renewal command with a deploy hook that touches the renew_success.flag.
 OUTPUT=$(docker compose --env-file "$ENV_FILE_PATH" \
   -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" run --rm "$CERTBOT_CONTAINER_NAME" \
-  renew $FORCE_OPTION --deploy-hook "touch $RENEW_SUCCESS_FLAG" 2>&1)
+  renew $FORCE_OPTION --deploy-hook "touch $RENEW_SUCCESS_FLAG_PATH_IN_CERTBOT_CONTAINER" 2>&1)
 echo "$OUTPUT" >> "$LOG_FILE_PATH"
 
 # Check if the renew_success.flag file exists.
-if [ -f "$RENEW_SUCCESS_FLAG" ]; then
+if [ -f "$RENEW_SUCCESS_FLAG_PATH_IN_HOST" ]; then
   echo "Certificate renewal detected. Reloading nginx..." >> "$LOG_FILE_PATH"
   if docker compose --env-file "$ENV_FILE_PATH" \
          -f "$DOCKER_COMPOSE_FILE_ABSOLUTE_PATH" \
@@ -69,8 +70,7 @@ if [ -f "$RENEW_SUCCESS_FLAG" ]; then
   else
     echo "Error: Failed to reload nginx." >> "$LOG_FILE_PATH"
   fi
-  # Remove the flag file so a future run starts fresh.
-  rm "$RENEW_SUCCESS_FLAG"
+
 else
   echo "No certificate renewal was needed." >> "$LOG_FILE_PATH"
 fi
