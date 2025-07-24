@@ -12,7 +12,7 @@ services:
       - "${NGINX_CONFIG_PATH}:/etc/nginx:ro"
       - "${NGINX_HTML_PATH}:/usr/share/nginx/html:ro"
       - "${LETSENCRYPT_PATH}:/etc/letsencrypt:ro"
-      - "${LOG_PATH}:/var/log/nginx"
+      - "${LOG_ABSOLUTE_PATH}:/var/log/nginx"
     healthcheck:
       test: ["CMD", "${NGINX_HEALTHCHECK_TEST}"]
       interval: "${NGINX_HEALTHCHECK_INTERVAL}"
@@ -27,5 +27,5 @@ services:
     volumes:
       - "${LETSENCRYPT_PATH}:/etc/letsencrypt"
       - "${NGINX_HTML_PATH}:/usr/share/nginx/html"
-      - "${LOG_PATH}:/var/log/letsencrypt/"
+      - "${LOG_ABSOLUTE_PATH}:/var/log/letsencrypt/"
     restart: "${CERTBOT_CONTAINER_RESTART}"
