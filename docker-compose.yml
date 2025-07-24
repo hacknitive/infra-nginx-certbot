@@ -5,8 +5,8 @@ services:
     env_file:
       - "${ENV_FILE}"
     ports:
-      - "${EXTERNAL_PORT_FOR_PORT_80}:80"
-      - "${EXTERNAL_PORT_FOR_PORT_443}:443"
+      - "${NGINX_EXTERNAL_PORT_FOR_PORT_80}:80"
+      - "${NGINX_EXTERNAL_PORT_FOR_PORT_443}:443"
     restart: ${NGINX_CONTAINER_RESTART}
     volumes:
       - "${MOUNT_PATH_FOR_NGINX_CONF}:/etc/nginx/nginx.conf:ro"
@@ -26,6 +26,8 @@ services:
     image: "${CERTBOT_DOCKER_IMAGE_NAME}"
     env_file:
       - "${ENV_FILE}"
+    ports:
+      - "${CERTBOT_EXTERNAL_PORT_FOR_PORT_80}:80"
     volumes:
       - "${MOUNT_PATH_FOR_LETSENCRYPT}:/etc/letsencrypt"
       - "${MOUNT_PATH_FOR_HTML}:/usr/share/nginx/html"
