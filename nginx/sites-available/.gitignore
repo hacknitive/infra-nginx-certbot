@@ -1,5 +1,5 @@
 *
 !.gitignore
-!log.x50.ir-80.conf
-!log.x50.ir-443.conf
+!example.com-80.conf
+!example.com-443.conf
 !common_*
