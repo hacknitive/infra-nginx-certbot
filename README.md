@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/avatar.jpeg" alt="Project Nginx-Certbot Docker Avatar" width="200">
+</p>
+
 # Ready-to-Use Nginx-Certbot Docker Infrastructure
 This repository provides a containerized solution for automating the issuance and renewal of SSL certificates using [Certbot](https://certbot.eff.org/) together with [Nginx](https://nginx.org/). Leveraging Docker Compose, this project ensures the seamless integration of Nginx (serving web content and handling ACME challenges) and Certbot (acquiring and renewing certificates), while automating the process of certificate renewal.
 
