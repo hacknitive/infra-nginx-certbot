@@ -6,3 +6,5 @@ automatic_git_status_add_commit_push.sh
 venv/
 renew_and_reload.log
 certbot/
+docker-compose*
+!docker-compose.yml.example
